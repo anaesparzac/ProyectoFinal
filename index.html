@@ -1,0 +1,124 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>CONFIGURACIÓN DE ENTORNO DE DESARROLLO Y PRUEBA LOCAL EN UBUNTU</title>
+        <style>
+			a:link    {color:saddlebrown; background-color:transparent; text-decoration:none}
+			a:visited {color:darkred; background-color:transparent; text-decoration:none}
+			a:hover   {color:burlywood; background-color:transparent; text-decoration:underline}
+			a:active  {color:chocolate; background-color:transparent; text-decoration:underline}
+            .titulos{
+                background-color: antiquewhite;
+            }
+        </style>
+    </head>
+    <body style="font-family: arial; margin: 5%">
+         <h1 style="text-align: center; background-color: antiquewhite; padding: 3%">CONFIGURACIÓN DE ENTORNO DE DESARROLLO Y PRUEBA LOCAL EN UBUNTU SERVER</h1>
+        
+        <ul><b>
+             <li><a href="#inst">Instalación de paquetes</a></li>
+             <li><a href="#git">Descarga de la aplicación a través de git</a></li>
+             <li><a href="#vh">Configuración de VirtualHost de Apache</a></li>
+             <li><a href="#dnsu">Configuración del DNS Local de Ubuntu</a></li>
+             <li><a href="#dnsw">Configuración del DNS Local de Windows</a></li>
+        </b>
+        </ul>
+       
+        <h2 class="titulos">Ubuntu server</h2>
+            <p>Ubuntu Server es un Sistema Operativo sin entorno gráfico (aunque podemos instalarlo) lo que quiere decir que todas las acciones se realizan mediante consola, y normalmente ni si quiera a través de el propio servidor, sino desde una conexión remota. El manejo de Ubuntu Server es muy similar al de cualquier otro Sistema Linux, pero con las particularidades de Ubuntu (como el sudo).</p>
+            <p>En este manual voy a mostrar el procedimiento para configurar el entorno de una aplicación web, creada en Windows, en Ubuntu Server usando las siguientes herramientas:</p>
+            <h3>Apache</h3>
+            <p>Apache es la aplicación de servidor web que procesa y entrega el contenido web a un ordenador. Apache es el servidor web más popular en internet, haciendo funcionar casi el 54% de todas las páginas web.</p>
+            <h3>MySQL</h3>
+            <p>Cada aplicación web, ya sea simple o compleja, requiere una base de datos para almacenar los datos que recoge. MySQL, que es de código abierto, es el sistema gestor de base de datos más popular. Alimenta desde websites de aficionados hasta plataformas profesionales como WordPress. Puede aprender cómo dominar PHP con este curso xxx.</p>
+            <h3>PHP</h3>
+            <p>PHP son las siglas de Preprocesador de Hipertexto. Es un lenguaje de script del lado del servidor que hace funcionar algunas de las páginas web más famosas del mundo, incluyendo WordPress y Facebook. Es de código abierto, relativamente fácil de aprender, y funciona perfectamente con MySQL, lo que lo ha hecho una opción muy popular para los desarrolladores web. </p>
+               
+        <h2 class="titulos" id="inst">Instalación de paquetes</h2>
+            <p> Para que sea posible llevar a cabo la configuración de la aplicación web, se debe instalar Apache, MySQL y PHP. Para eso, primero es necesario asegurarnos de que los paquetes estén actualizados utilizando los comandos:</p>
+        <ol>
+            <li><b>sudo apt update <br></b> actualiza la lista de paquetes disponibles y sus versiones, pero no instala o actualiza ningún paquete. Esta lista la coge de los servidores con repositorios que tenemos definidos en el sources.list.</li>
+            <img src="update.JPG">
+            <br> <br> <br>
+            <li><b>sudo apt upgrade</b><br> una vez el comando anterior ha descargado la lista de software disponible y la versión en la que se encuentra, podemos actualizar dichos paquetes usando este comando. Instalará las nuevas versiones respetando la configuración del software cuando sea posible.</li>
+            <img src="upgrade.jpg">
+        </ol>
+            <p>Para continuar, presionar la tecla "S" (mayúscula).<br> <br>  
+            Lo siguiente es descargar las aplicaciones usando el comando " sudo apt install " como se muestra a continuación: 
+            </p>
+            <ul>
+               <li> Apache y PHP <br><p>El paquete "php" que se instalará tiene incluido apache2, que es el servicio Apache que se usará.</p>
+                   <img src="php.JPG" ></li><br>  
+                <li> MySQL Sever<br> <img src="mysql.JPG"></li><br>
+                <li> PHP-MySQL <br> <img src="php_mysql.JPG"></li>
+            </ul>
+               <p>Ahora hay que iniciar las aplicaciones que se acaban de instalar con el comando <b>sudo service ____ start</b></p>
+        <img src="service_start.JPG">
+        <p>Para comprobar que todos los servicios estén iniciados, se debe escribir el comando <b>service --status all | grep _____</b></p>
+        <img src="status.JPG">
+        <p>Para comprobar que Apache está corriendo y funcionando como debe ser, se necesita:</p>
+        <ol>
+            <li>Escribir el comando <b>ifconfig</b> para ver la información de las redes.</li><img src="ifconfig.jpg"><br><br>
+            <li>Escribir en el navegador de la máquina anfitrión, la dirección IP que da el adaptador de red sólo-anfitrión (enp0s8)</li><img src="prueba_ip.JPG"><br><p>Y en el navegador debe aparecer esto:</p><img src="prueba_ubuntu.JPG">
+        </ol>
+         <br>
+    <h2 class="titulos" id="git">Descargar la aplicación a través de git</h2>
+            <p>Para descargar la aplicación web, se pondrá en uso un repositorio existente en git, en el cual están todos los archivos necesarios. Primero es necesario cambiar de directorios a la carpeta html usando <b> cd /var/www/html</b>. Después, para clonar el repositorio de git, se usará el comando <b>sudo git clone</b> </p>
+            <img src="git%20clone.JPG">
+        
+    <p>Es necesario que se puedan hacer los cambios necesarios y guardalos. Por ejemplo, para poder conectar y ejecutar mysql, se tienen que seguir los siguientes pasos:</p>
+        <ol>
+            <li>Por comodidad y accesibilidad, cambiar el nombre de la carpeta con <b>sudo mv</b></li>
+            <img src="cambiar_nombre_library.JPG"><br><br>
+            <li>Después, cambiarse a la carpeta db de library.com con <b>cd</b></li><img src="library_db.JPG"><br><br>
+            <li>Después, usar el comando <b>sudo nano library.sql</b> para poder editar el archivo</li>
+            <li>Debajo de la línea <b>CREATE DATABASE library;</b>, agregar la línea <b>USE library;</b></li><img src="use_library.JPG"><br><br>
+            <li>Presionar las teclas Ctrl + O (para guardar), dar enter y luego presionar Ctrl + X (para salir del editor.)</li>
+            <li>Escribir <b>cat library</b> para salir de nano.</li>
+            <li>Usar <b>sudo -i</b> para estar en modo usuario root.</li>
+            <li>Ya en modo root, el símbolo $ se cambiará por #. Escribir <b>mysql para entrar al monitor de mysql</b></li><img src="sudo-i.JPG"><br><br>
+            <li>Dentro de mysql, usaremos <b>source</b> para importar la base de datos a Ubuntu y usarla de manera local y le ponemos la dirección de la base de datos como fuente.</li><img src="mysql_source.JPG"><br><br>
+            <li>Ver las bases de datos que existen con <b>show databases;</b> para agurarnos que library está entre ellas.</li><img src="show_databases.JPG"><br><br>
+            <li>Ver los usuarios que existen en mysql</li><img src="select_user.JPG"><br><br>
+            <li>Crear un usuario para conectarse al localhost</li><img src="create_user.JPG"><br><br>
+            <li>Conceder al usuario poder hacer uso de la base de datos.</li><img src="grant.JPG"><br><br>
+            <li>Con <b>exit</b> salir de mysql y del modo usuario root</li><img src="exit.JPG"><br><br>
+            <li>Probar que el usuario si esté conectado a mysql</li><img src="probar%20conexion%20mysql.JPG"><br><br>
+        </ol>
+           <p>También se deben hacer los cambios necesarios en los otros archivos, por ejemplo en conexion.php:</p> 
+        <ol>
+            <li style="font-weight: bold">cd /var/www/html/classes</li>
+            <li><b>cd conexion.php</b></li>
+            <li><b>ll</b></li>
+            <li><b>sudo nano conexion.php</b></li>
+            <li>Cambiar los datos de username y password en la clase conexion.php para que concuerden con los del usuario mysql recién creado.</li><img src="cambiar%20user%20y%20passwd%20en%20conexion.JPG"><br><br>
+            
+        </ol>
+             <p>Para hacer la prueba de que la aplicación esté bien configurada hasta el momento, escrbir la IP de la red solo-anfitrión como se hizo anteriormente y agregarle library.com</p>
+        <img src="prueba%20library_com.JPG">
+        <img src="iniciosesion.JPG"><br><br>
+    <h2 class="titulos" id="vh">Configuración de VirtualHost de Apache</h2>
+       <p>El servidor web de Apache es uno de los más populares para proveer contenido web en Internet. Cuenta con más de la mitad de todos los sitios web activos en la red y es extremadamente poderoso y flexible.<br><br>
+        Apache divide su funcionalidad y componentes en unidades independientes que pueden ser configuradas independientemente. La unidad básica que describe un sitio individial o el dominio llamado virtual host.<br><br>
+        Estas asignaciones permiten al administrador utilizar un servidor para alojar varios dominios o sitios en una simple interface o IP utilizando un mecanismo de coincidencias. Esto es relevante para cualquiera que busque alojamiento para más de un sitio en un solo VPS.<br><br>
+        Cada dominio que es configurado apuntará al visitante a una carpeta específica que contiene la información del sitio, nunca indicará que el mismo servidor es responsable de otros sitios. Este esquema es expandible sin limites de software tanto como el servidor pueda soportar la carga.</p>
+        <ol>
+            <li>Ir a la carpeta <i>sites-available</i> de apache y abrir el archivo <i>library.com.conf</i> para configurarlo.</li>
+            <img src="sites-available.JPG"><br><br>
+            <li>Dentro de el archivo, escribir las siguientes líneas, que serán las que configurarán el VirtualHost:</li><img src="virtual_host.JPG"><br><br>
+            <li>Presiona Ctrl + O para guardar y luego Ctrl + X para salir de nano.</li>
+            <li>Para hacer disponible <i>library.com</i>, escribir el comando <b>sudo a2ensite library.com</b></li><img src="a2ensite.JPG"><br><br>
+            <li>Como lo requiere la validación, con <b>sudo service apache2 restart</b>, reiniciar el servicio de apache.</li>
+        </ol>
+    <h2 class="titulos" id="dnsu">Configuración del DNS local de Ubuntu</h2>
+        <p>Escribir <b>sudo nano /etc/hosts</b> para entrar al archivo hosts para editarlo y configurarle de tal manera que la IP de nuestra máquina local (127.0.0.1) esté conectada a <i>library.com:</i></p><img src="hosts.JPG"><br><p> Presiona Ctrl + O para guardar y luego Ctrl + X para salir de nano.</p>
+         <h2 class="titulos" id="dnsw">Configuración del DNS local de Windows</h2>
+        <ul>
+            <li>Para finalizar, entrar al archivo hosts de Windows (c:\windows\system32\drivers\etc\hosts) con el bloc de notas ejecutándose como administrador.</li>
+            <li>Editar el archivo, escribiendo al final de éste, la IP de la red sólo-anfitrión de Ubuntu conectado a library.com:</li><img src="dnswindows.JPG">
+        </ul>
+        Para probar que todo está bien configurado y está funcionando, entrar al navegador y escribir el dominio <i>library.com.</i><br><img src="pruebafin.JPG"><br> <img src="pruebafinal2.JPG"><br><br>
+        Como la página web sí aparece, la aplicación está configurada correctamente.
+        </body>
+    <footer style="font-family: arial; text-align: right">Ana María Esparza Contreras<br> 5°AV PR<br>Aplicaciones y servicios</footer>
+</html>
